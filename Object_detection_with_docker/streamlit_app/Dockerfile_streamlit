@@ -1,0 +1,15 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Copy and install dependencies
+COPY requirements_streamlit.txt .
+RUN pip install --no-cache-dir -r requirements_streamlit.txt
+
+# Copy app script
+COPY . .
+
+# Expose port for Streamlit
+EXPOSE 8501
+
+CMD ["streamlit", "run", "streamlit.py", "--server.port=8501", "--server.enableCORS=false"]

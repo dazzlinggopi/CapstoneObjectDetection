@@ -1,0 +1,21 @@
+# Core dependencies
+numpy==1.26.4
+#cython==3.0.10  # Ensure available before cython_bbox builds
+#python-dotenv==1.0.1
+#wheel
+#python-multipart>=0.0.5
+streamlit
+
+#fastapi[standard]==0.110.1
+#uvicorn[standard]==0.29.0
+#ultralytics==8.2.13
+#opencv-python-headless==4.9.0.80
+
+#cython_bbox==0.1.3  # Requires Cython pre-installed
+#pycocotools==2.0.7
+#redis==5.0.4
+
+
+# Optional tracking utilities
+# lap==0.4.0  # Used in some trackers like DeepSORT or ByteTrack
+	
