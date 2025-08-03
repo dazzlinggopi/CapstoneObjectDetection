@@ -1,0 +1,35 @@
+name: Deploy Streamlit App
+
+on:
+  push:
+    paths:
+      - 'streamlit_app/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Azure CLI login using OIDC
+      uses: azure/login@v1
+      with:
+        federatedToken: ${{ secrets.AZURE_FEDERATED_TOKEN }}
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+    - name: Login to ACR
+      run: az acr login --name ${{ secrets.ACR_NAME }}
+
+    - name: Build and push Streamlit image
+      run: |
+        docker build -f streamlit_app/Dockerfile_streamlit -t ${{ secrets.ACR_LOGIN_SERVER }}/streamlit_app:latest ./streamlit_app
+        docker push ${{ secrets.ACR_LOGIN_SERVER }}/streamlit_app:latest
+
+    - name: Deploy to Azure Container Apps
+      run: |
+        az containerapp update \
+          --name streamlit_app \
+          --resource-group ${{ secrets.RESOURCE_GROUP }} \
+          --image ${{ secrets.ACR_LOGIN_SERVER }}/streamlit_app:latest
